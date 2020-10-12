@@ -1,0 +1,59 @@
+DAT 3
+
+
+1 - 
+
+2 - 
+SELECT * FROM Scooter WHERE needCharge=1 OR needRepair=1
+
+3 - SELECT T1.idUserSubscribtion AS User_id, T1.idSub AS id_sub, T3.price AS PRICE_RENTAL,
+IF(T1.idSub = 1,T3.price/2, T3.price/3) AS PRICE_AFTER_SUB
+FROM UserSubscribtion T1 
+JOIN Subcription T2 ON T1.idSub = T2.idSubcription
+JOIN Rental T3 ON T1.idSub = T3.idUserRental
+GROUP BY T1.idUserSub
+
+4- SELECT T1.idUserRental, SUM(T1.Price) AS Total_Price, MONTH(T1.startAt) AS Month, YEAR(T1.startAt) AS YEAR
+FROM Rental T1
+GROUP BY T1.idUserRental
+
+5 - SELECT T1.idUserRental, AVG(DATEDIFF(T1.endAt,T1.startAt)) AS AVERAGE
+FROM Rental T1
+GROUP BY T1.idUserRental
+
+6 - SELECT T1.idUserRental, SUM(DATEDIFF(T1.endAt,T1.startAt)) AS TotalTime
+FROM Rental T1
+GROUP BY T1.idUserRental
+
+7 - SELECT T1.idUserRental AS User_id, 
+SUM(T1.Price) AS Price_rental,
+T2.Price AS Price_sub, 
+SUM(T1.Price) + T2.Price AS TOTAL
+FROM Rental T1
+JOIN Subcription T2 ON T1.idUserRental = T2.idSubcription
+GROUP BY T1.idUserRental
+
+
+8 - Nombre de personne inscrit par mois et année
+
+SELECT MONTH(createAt) AS Month, COUNT(idUser) AS Number_of_User, YEAR(createAt) AS Year
+FROM User
+GROUP BY Month
+
+
+9 -  Nombre de personne s’étant abonné par rapoort aux inscription par mois, année 
+
+SELECT COUNT(T1.createAt) AS Number_of_user, Month(T1.createAt) AS Month, YEAR(T1.createAt) AS Year
+FROM UserSubscribtion T1
+GROUP BY Month(T1.createAt)
+
+10- Nombre de scooter en réparation par mois, année  trié par réparateur 
+
+SELECT T1.idWorkerRepair, COUNT(T1.dateRepair) AS Number_of_Repair, Month(T1.dateRepair) AS Month, YEAR(T1.dateRepair) AS Year 
+FROM Repair T1 GROUP BY T1.idWorkerRepair
+
+11- Nombre de réparation total sur 1 an
+
+SELECT COUNT(T1.dateRepair) AS Number_of_Repair, YEAR(T1.dateRepair) AS Year 
+FROM Repair T1 
+GROUP BY YEAR(T1.dateRepair)
